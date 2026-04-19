@@ -206,7 +206,7 @@ def process_if_needed(uploaded_files, face_mesh, ear_threshold: float):
     if st.session_state["last_signature"] == signature and st.session_state["results"]:
         return st.session_state["results"]
 
-    progress_bar = st.progress(0, text="正在分析合照...")
+    progress_bar = st.progress(0, text="正在分析照片...")
     status = st.empty()
     processed_results = []
     total_files = len(uploaded_files)
@@ -233,11 +233,11 @@ def process_if_needed(uploaded_files, face_mesh, ear_threshold: float):
 
 
 def main():
-    st.set_page_config(page_title="合照闭眼检测工具", layout="wide")
+    st.set_page_config(page_title="照片闭眼检测工具", layout="wide")
     ensure_state()
 
-    st.title("合照闭眼检测工具")
-    st.caption("上传同一场景的多张合照，自动统计每张照片中的闭眼人数并推荐最佳结果。")
+    st.title("照片闭眼检测工具")
+    st.caption("上传同一场景的多张照片，自动统计每张照片中的闭眼人数并推荐最佳结果。")
 
     with st.sidebar:
         st.header("参数")
@@ -249,12 +249,9 @@ def main():
             step=0.01,
             help="默认使用 0.20。EAR 越小，越可能是闭眼。",
         )
-        st.info(
-            "V1 基于 MediaPipe Face Mesh + EAR。侧脸、遮挡或低头场景下，结果可能存在偏差。"
-        )
 
     uploaded_files = st.file_uploader(
-        "上传合照（支持 JPG / PNG，可一次选择多张）",
+        "上传照片（支持 JPG / PNG，可一次选择多张）",
         type=["jpg", "jpeg", "png"],
         accept_multiple_files=True,
     )
@@ -262,7 +259,7 @@ def main():
     if not uploaded_files:
         st.session_state["last_signature"] = None
         st.session_state["results"] = []
-        st.info("请先上传一组同一场景的合照。")
+        st.info("请先上传一组同一场景的照片。")
         return
 
     face_mesh = load_face_mesh()
