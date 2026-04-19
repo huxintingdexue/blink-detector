@@ -1,5 +1,5 @@
-streamlit
-mediapipe
-opencv-python-headless
-Pillow
-numpy
+streamlit>=1.37,<2
+mediapipe==0.10.21
+opencv-python-headless==4.10.0.84
+Pillow>=10,<12
+numpy<2
