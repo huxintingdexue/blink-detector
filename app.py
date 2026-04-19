@@ -168,21 +168,22 @@ def render_recommendation(best_result):
     st.success(
         f"✅ 推荐选择：{best_result['file_name']}  |  闭眼人数 {best_result['blink_count']}"
     )
-    cols = st.columns([1, 2])
+    cols = st.columns([1.4, 1])
     with cols[0]:
-        st.image(best_result["thumbnail"], use_container_width=True)
+        st.image(best_result["file_bytes"], use_container_width=True)
     with cols[1]:
         st.metric("闭眼人数", best_result["blink_count"])
         st.write(f"有效人脸数：{best_result['valid_faces']}")
         st.write(f"不确定人脸数：{best_result['uncertain_faces']}")
         st.write(f"无效人脸数：{best_result['invalid_faces']}")
         st.download_button(
-            "下载推荐图片",
+            "下载推荐照片（原图）",
             data=best_result["file_bytes"],
             file_name=best_result["file_name"],
             mime=best_result["mime_type"],
             use_container_width=True,
             key=f"download-best-{best_result['file_name']}",
+            type="primary",
         )
 
 
