@@ -143,6 +143,8 @@ def process_uploaded_file(uploaded_file, face_mesh, ear_threshold: float):
 
     result = {
         "file_name": uploaded_file.name,
+        "file_bytes": raw_bytes,
+        "mime_type": uploaded_file.type or "application/octet-stream",
         "blink_count": blink_count,
         "valid_faces": valid_faces,
         "uncertain_faces": uncertain_faces,
@@ -174,26 +176,43 @@ def render_recommendation(best_result):
         st.write(f"有效人脸数：{best_result['valid_faces']}")
         st.write(f"不确定人脸数：{best_result['uncertain_faces']}")
         st.write(f"无效人脸数：{best_result['invalid_faces']}")
+        st.download_button(
+            "下载推荐图片",
+            data=best_result["file_bytes"],
+            file_name=best_result["file_name"],
+            mime=best_result["mime_type"],
+            use_container_width=True,
+            key=f"download-best-{best_result['file_name']}",
+        )
 
 
 def render_result_list(results):
     st.subheader("结果列表")
-    header = st.columns([1.2, 2.2, 1, 1, 1, 1])
+    header = st.columns([1.2, 2.2, 1, 1, 1, 1, 1.2])
     header[0].markdown("**缩略图**")
     header[1].markdown("**文件名**")
     header[2].markdown("**闭眼人数**")
     header[3].markdown("**有效**")
     header[4].markdown("**不确定**")
     header[5].markdown("**无效**")
+    header[6].markdown("**导出**")
 
     for item in results:
-        cols = st.columns([1.2, 2.2, 1, 1, 1, 1])
+        cols = st.columns([1.2, 2.2, 1, 1, 1, 1, 1.2])
         cols[0].image(item["thumbnail"], use_container_width=True)
         cols[1].write(item["file_name"])
         cols[2].write(item["blink_count"])
         cols[3].write(item["valid_faces"])
         cols[4].write(item["uncertain_faces"])
         cols[5].write(item["invalid_faces"])
+        cols[6].download_button(
+            "下载原图",
+            data=item["file_bytes"],
+            file_name=item["file_name"],
+            mime=item["mime_type"],
+            key=f"download-{item['file_name']}",
+            use_container_width=True,
+        )
 
 
 def ensure_state():
